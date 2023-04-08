@@ -17,7 +17,6 @@ db_user = DBUserData()
 async def start_command(message: types.Message):
     arg = message.get_args()
     data = db_user.get_user_data(arg)
-    print(data)
     await message.answer(f'Аргументы: {arg}')
     await message.answer("Привет! Я бот, который может помочь тебе в разных задачах.")
 
