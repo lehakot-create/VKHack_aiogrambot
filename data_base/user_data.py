@@ -17,11 +17,16 @@ class DBUserData:
         self.conn = self.engine.connect()
 
     def get_user_data(self, uuid: str):
+        # uuid = "c441eeca-734d-43f1-bde9-5a680d8487cc"
         query = select(
-            self.employee_table.c.uuid
+            self.employee_table
             ).where(
-            self.employee_table.c.id == 8
+            self.employee_table.c.uuid == uuid
             )
-        result = self.conn.execute(query).fetchone()
+        result = self.conn.execute(query).first()
         self.conn.close()
-        return result._data[0]
+        # print(result.job_title.name)
+        try:
+            return result
+        except AttributeError:
+            return None
