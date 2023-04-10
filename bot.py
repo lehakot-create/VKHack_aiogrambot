@@ -17,17 +17,17 @@ db_user = DBUserData()
 async def start_command(message: types.Message):
     arg = message.get_args()
     data = db_user.get_user_data(arg)
-    # await message.answer(f'Аргументы: {arg}')
     await message.answer(f"Добро пожаловать в компанию ООО Ромашка.\n"
                          f"Я бот Вася.\n"
                          f"Помогу тебе соорентироваться в нашей компании.")
 
     if data:
         await message.answer(f'Давай сверим данные.\n'
-                             f'Ты {data[1]} {data[2]} {data[6]}\n'
-                             f'{data[3]} г.р.\n')
-    #                          f'Должность {data[5]["name"]}')
-        
+                             f'Ты {data.get("surname")} {data.get("name")} {data.get("surname2")}\n'
+                             f'{data.get("birthday")} г.р.\n'
+                             f'Должность {data.get("job_title")}')
+
+
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
 
