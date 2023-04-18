@@ -22,17 +22,16 @@ class DBUserData:
         """
         Добавляет id пользователя телеграма в БД
         """
-        print(user_id, telegram_user_id)
         query = update(
             self.employee_table
             ).where(
             self.employee_table.c.id == user_id
-            ).values(telegram_user_id=telegram_user_id,)
-        print(query)
-        print(query.compile().params)
-        result = self.conn.execute(query)
-        print(result.rowcount)
-        self.conn.close()
+            ).values(
+            telegram_user_id=telegram_user_id
+            )
+        self.conn.execute(query)
+        self.conn.commit()
+
 
     async def get_user_data(self, uuid: str,
                             telegram_user_id: str) -> dict:
@@ -45,6 +44,7 @@ class DBUserData:
             )
 
         result = self.conn.execute(employee).first()
+        # print(result)
 
         job_title = select(
             self.app_jobtitle.c.name
@@ -59,11 +59,21 @@ class DBUserData:
         dict['birthday'] = result[3]
         dict['job_title'] = result2[0]
 
-        # print(result[10])
         if result[10] is None:
             self.add_user_telegram_id_to_db(
                 user_id=result[0],
                 telegram_user_id=telegram_user_id
                 )
-        self.conn.close()
         return dict
+    
+    async def get_date_time_contract(self, telegram_user_id: str) -> str:
+        """
+        Получаем дату подписания трудового договора
+        """
+        query = select(
+            self.employee_table
+            ).where(
+            self.employee_table.c.telegram_user_id == telegram_user_id
+            )
+        result = self.conn.execute(query).fetchone()
+        return result[4]
