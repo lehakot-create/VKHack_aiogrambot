@@ -1,4 +1,4 @@
-import logging
+# import logging
 from datetime import datetime
 from datetime import date
 from aiogram import Bot, Dispatcher, types
@@ -12,8 +12,9 @@ from data_base.user_data import DBUserData
 from keyboards.keyboard import yes_no_kb
 from keyboards.inline_kb import made_inline_kb
 
+from utils.logger import logger
 
-logging.basicConfig(level=logging.INFO)
+# logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot, storage=MemoryStorage())
@@ -143,7 +144,13 @@ async def process_callback(call: types.CallbackQuery):
 
 
 if __name__ == '__main__':
-    executor.start_polling(dp, skip_updates=True)
+    try:
+        logger.info('Start bot!')
+        executor.start_polling(dp, skip_updates=True)
+    except (KeyboardInterrupt, SystemExit):
+        logger.error("Bot stopped with error!")
+    finally:
+        logger.info('Stop bot!')
 
 # https://t.me/hack_teams_bot?start=5000
 # https://t.me/hack_teams_bot?start=c441eeca-734d-43f1-bde9-5a680d8487cc

@@ -65,7 +65,7 @@ class DBUserData:
                 telegram_user_id=telegram_user_id
                 )
         return dict
-    
+
     async def get_date_time_contract(self, telegram_user_id: str) -> str:
         """
         Получаем дату подписания трудового договора
